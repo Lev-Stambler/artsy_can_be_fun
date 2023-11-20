@@ -1,0 +1,179 @@
+{
+    "cells": [
+        {
+            "language": "markdown",
+            "source": [
+                "## This sample shows how we can render some HTML, and in the html have a placeholder for the plot\n"
+            ],
+            "outputs": []
+        },
+        {
+            "language": "html",
+            "source": [
+                "<style>\n    #div {\n        width: 500px;\n    }\n    #dvText {\n        margin-left: 310px;\n        font-size: large;\n        float: left;\n    }\n</style>\n<div style=\"width: 100%; overflow: hidden;\">\n    <div id='dvText'>\n        This is a sample plot. Note, initially there is no plot.\n        However we have an empty div with the id `myDiv`.\n        The plotly renderer will first look for an id you have specified, if found it will render the plot in that HTML\n        Element, if not found\n        it will render the plot in the output of the same cell which contains the code for the plot.\n    </div>\n    <div id=\"myDiv\"></div>\n</div>"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style>",
+                                "    #div {",
+                                "        width: 500px;",
+                                "    }",
+                                "    #dvText {",
+                                "        margin-left: 310px;",
+                                "        font-size: large;",
+                                "        float: left;",
+                                "    }",
+                                "</style>",
+                                "<div style=\"width: 100%; overflow: hidden;\">",
+                                "    <div id='dvText'>",
+                                "        This is a sample plot. Note, initially there is no plot.",
+                                "        However we have an empty div with the id `myDiv`.",
+                                "        The plotly renderer will first look for an id you have specified, if found it will render the plot in that HTML",
+                                "        Element, if not found",
+                                "        it will render the plot in the output of the same cell which contains the code for the plot.",
+                                "    </div>",
+                                "    <div id=\"myDiv\"></div>",
+                                "</div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "const { Plotly } = require('node-kernel');\nvar data = [{\n    values: [19, 26, 55],\n    labels: ['Residential', 'Non-Residential', 'Utility'],\n    type: 'pie'\n}];\nvar layout = {\n    height: 200,\n    width: 300,\n    margin: {l:20, t:20, b:20, r:20}\n};\n\n// Note, the div is defined in the HTML of the previous cell, hence the Plot will be displayed above.\nPlotly.newPlot('myDiv', data, layout);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.ts.notebook.plotly+json",
+                            "value": {
+                                "requestId": "x94ab66dff22d4f51b46d2a887c937b5a",
+                                "type": "generatePlot",
+                                "ele": "myDiv",
+                                "data": [
+                                    {
+                                        "values": [
+                                            19,
+                                            26,
+                                            55
+                                        ],
+                                        "labels": [
+                                            "Residential",
+                                            "Non-Residential",
+                                            "Utility"
+                                        ],
+                                        "type": "pie"
+                                    }
+                                ],
+                                "layout": {
+                                    "height": 200,
+                                    "width": 300,
+                                    "margin": {
+                                        "l": 20,
+                                        "t": 20,
+                                        "b": 20,
+                                        "r": 20
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "typescript",
+            "source": [
+                "import {display} from 'node-kernel';\ndisplay.html(`\n    This is a sample plot. Note, initially there is plot.\n    However we have an empty div with the id \"myDiv\". The plot will be rendered within this HTML element.\n    <div id=\"mySecondDiv\"></div>`);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "text/html",
+                            "value": [
+                                "<style> table, th, tr { text-align: left; }</style>",
+                                "    This is a sample plot. Note, initially there is plot.",
+                                "    However we have an empty div with the id \"myDiv\". The plot will be rendered within this HTML element.",
+                                "    <div id=\"mySecondDiv\"></div>"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "Plotly.newPlot('mySecondDiv', data, layout);"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.ts.notebook.plotly+json",
+                            "value": {
+                                "requestId": "x2e96ce5b525341d0b2094ccee33996a3",
+                                "type": "generatePlot",
+                                "ele": "mySecondDiv",
+                                "data": [
+                                    {
+                                        "values": [
+                                            19,
+                                            26,
+                                            55
+                                        ],
+                                        "labels": [
+                                            "Residential",
+                                            "Non-Residential",
+                                            "Utility"
+                                        ],
+                                        "type": "pie"
+                                    }
+                                ],
+                                "layout": {
+                                    "height": 200,
+                                    "width": 300,
+                                    "margin": {
+                                        "l": 20,
+                                        "t": 20,
+                                        "b": 20,
+                                        "r": 20
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "language": "javascript",
+            "source": [
+                "function createSVGElement(tagName, attributes) {\n    let element = document.createElementNS('http://www.w3.org/2000/svg', tagName);\n    for (let attr in attributes) {\n        element.setAttribute(attr, attributes[attr]);\n    }\n    return element;\n}\n\nfunction generateSVGFromLines(lines, width, height) {\n    let svg = createSVGElement('svg', { width: width, height: height });\n\n    lines.forEach(line => {\n        let lineElement = createSVGElement('line', { \n            x1: line.x1, \n            y1: line.y1, \n            x2: line.x2, \n            y2: line.y2, \n            stroke: 'black', // You can customize this\n            'stroke-width': 2 // And this too\n        });\n        svg.appendChild(lineElement);\n    });\n\n    return svg;\n}\n\n// Usage\nlet lines = [\n    { x1: 10, y1: 10, x2: 100, y2: 100 },\n    { x1: 50, y1: 50, x2: 150, y2: 150 }\n];\n\nlet svgElement = generateSVGFromLines(lines, 500, 500);\n\n// To display on a webpage\n// document.body.appendChild(svgElement);\n\n// To export as a file or for other purposes\nlet svgString = new XMLSerializer().serializeToString(svgElement);\nconsole.log(svgString); // This is your SVG file content as a string"
+            ],
+            "outputs": [
+                {
+                    "items": [
+                        {
+                            "mime": "application/vnd.code.notebook.error",
+                            "value": {
+                                "name": "ReferenceError",
+                                "message": "document is not defined",
+                                "stack": "    at createSVGElement (<Cell 6> [2, 15])\n    at generateSVGFromLines (<Cell 6> [10, 11])\n    at <Cell 6> [33, 0]\n    at <Cell 6> [32, 46]\n    at Script.runInContext (node:vm:141:12)\n    at Script.runInNewContext (node:vm:146:17)\n    at Object.runInNewContext (node:vm:306:38)\n    at C (/home/lev/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:113345)\n    at t.execCode (/home/lev/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:114312)\n    at k.<anonymous> (/home/lev/.vscode/extensions/donjayamanne.typescript-notebook-2.0.6/out/extension/server/index.js:2:142156)"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
